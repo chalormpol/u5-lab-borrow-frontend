@@ -1,0 +1,7 @@
+{
+  "name": "u5-lab-borrow-frontend",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}

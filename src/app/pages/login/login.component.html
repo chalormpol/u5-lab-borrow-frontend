@@ -1,0 +1,42 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Login (Mock) - Lab Borrow</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <p><strong>บัญชีทดสอบ</strong></p>
+  <ul>
+    <li>staff / 1234</li>
+    <li>admin / 1234</li>
+  </ul>
+
+  <form [formGroup]="form" (ngSubmit)="submit()">
+    <ion-item>
+      <ion-label position="stacked">Username</ion-label>
+      <ion-input
+        formControlName="username"
+        placeholder="staff หรือ admin"
+      ></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">Password</ion-label>
+      <ion-input
+        type="password"
+        formControlName="password"
+        placeholder="1234"
+      ></ion-input>
+    </ion-item>
+
+    <ion-button expand="block" type="submit">เข้าสู่ระบบ</ion-button>
+  </form>
+
+  <ion-toast
+    [isOpen]="toastOpen"
+    (didDismiss)="toastOpen = false"
+    [message]="toastMsg"
+    duration="2000"
+  >
+  </ion-toast>
+</ion-content>
