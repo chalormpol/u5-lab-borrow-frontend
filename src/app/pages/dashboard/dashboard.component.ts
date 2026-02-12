@@ -5,7 +5,7 @@ import {
   NonNullableFormBuilder,
   Validators,
 } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import {
   EquipmentService,
@@ -30,6 +30,11 @@ import {
   IonBadge,
   IonSelect,
   IonSelectOption,
+  IonCard,
+  IonCardHeader,
+  IonCardTitle,
+  IonCardContent,
+  IonIcon,
 } from '@ionic/angular/standalone';
 
 @Component({
@@ -55,6 +60,12 @@ import {
     IonBadge,
     IonSelect,
     IonSelectOption,
+    IonCard,
+    IonCardHeader,
+    IonCardTitle,
+    IonCardContent,
+    RouterLink,
+    IonIcon,
   ],
 })
 export class DashboardComponent implements OnInit {
@@ -75,7 +86,7 @@ export class DashboardComponent implements OnInit {
     itemName: this.fb.control('', {
       validators: [Validators.required, Validators.minLength(2)],
     }),
-    category: this.fb.control<EquipCategory>('Computer', {
+    category: this.fb.control<EquipCategory>('Philosophy', {
       validators: [Validators.required],
     }),
     qty: this.fb.control(1, {
@@ -123,7 +134,7 @@ export class DashboardComponent implements OnInit {
       .subscribe({
         next: (_) => {
           this.toast('เพิ่มอุปกรณ์สำเร็จ');
-          this.form.reset({ itemName: '', category: 'Computer', qty: 1 });
+          this.form.reset({ itemName: '', category: 'Philosophy', qty: 1 });
           this.load();
         },
         error: (e) => this.toast(e.message),
@@ -160,7 +171,7 @@ export class DashboardComponent implements OnInit {
         next: (_) => {
           this.toast('บันทึกการแก้ไขสำเร็จ');
           this.editingId = null;
-          this.form.reset({ itemName: '', category: 'Computer', qty: 1 });
+          this.form.reset({ itemName: '', category: 'Philosophy', qty: 1 });
           this.load();
         },
         error: (e) => this.toast(e.message),
@@ -169,7 +180,7 @@ export class DashboardComponent implements OnInit {
 
   cancelEdit() {
     this.editingId = null;
-    this.form.reset({ itemName: '', category: 'Computer', qty: 1 });
+    this.form.reset({ itemName: '', category: 'Philosophy', qty: 1 });
   }
 
   remove(id: string) {
@@ -218,6 +229,19 @@ export class DashboardComponent implements OnInit {
   logout() {
     this.auth.logout();
     this.router.navigateByUrl('/login');
+  }
+
+  // ✅ SUMMARY GETTERS
+  get totalCount() {
+    return this.rows.length;
+  }
+
+  get borrowedCount() {
+    return this.rows.filter((r) => r.status === 'borrowed').length;
+  }
+
+  get availableCount() {
+    return this.rows.filter((r) => r.status === 'available').length;
   }
 
   private toast(m: string) {

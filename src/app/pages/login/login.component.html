@@ -1,36 +1,61 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>Login (Mock) - Lab Borrow</ion-title>
+  <ion-toolbar color="primary">
+    <ion-title class="ion-text-center"> ระบบยืม–คืนหนังสือ </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
-  <p><strong>บัญชีทดสอบ</strong></p>
-  <ul>
-    <li>staff / 1234</li>
-    <li>admin / 1234</li>
-  </ul>
+  <div class="login-wrapper">
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title class="ion-text-center"> เข้าสู่ระบบ </ion-card-title>
+      </ion-card-header>
 
-  <form [formGroup]="form" (ngSubmit)="submit()">
-    <ion-item>
-      <ion-label position="stacked">Username</ion-label>
-      <ion-input
-        formControlName="username"
-        placeholder="staff หรือ admin"
-      ></ion-input>
-    </ion-item>
+      <ion-card-content>
+        <form [formGroup]="form" (ngSubmit)="submit()">
+          <ion-item>
+            <ion-label position="stacked">Username</ion-label>
+            <ion-input formControlName="username" placeholder="กรอก username">
+            </ion-input>
+          </ion-item>
 
-    <ion-item>
-      <ion-label position="stacked">Password</ion-label>
-      <ion-input
-        type="password"
-        formControlName="password"
-        placeholder="1234"
-      ></ion-input>
-    </ion-item>
+          <ion-item>
+            <ion-label position="stacked">Password</ion-label>
+            <ion-input
+              type="password"
+              formControlName="password"
+              placeholder="กรอกรหัสผ่าน"
+            >
+            </ion-input>
+          </ion-item>
 
-    <ion-button expand="block" type="submit">เข้าสู่ระบบ</ion-button>
-  </form>
+          <ion-button expand="block" type="submit" class="ion-margin-top">
+            เข้าสู่ระบบ
+          </ion-button>
+
+          <ion-button
+            expand="block"
+            fill="outline"
+            routerLink="/register"
+            class="ion-margin-top"
+          >
+            สมัครสมาชิก
+          </ion-button>
+        </form>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card class="ion-margin-top">
+      <ion-card-header>
+        <ion-card-subtitle>บัญชีทดสอบ</ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content>
+        <p>👤 staff1 / 1234</p>
+        <p>👤 asdf / 1234</p>
+        <p>👑 admin1 / 1234</p>
+      </ion-card-content>
+    </ion-card>
+  </div>
 
   <ion-toast
     [isOpen]="toastOpen"

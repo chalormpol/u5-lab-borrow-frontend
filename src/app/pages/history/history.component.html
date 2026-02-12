@@ -1,0 +1,51 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>ประวัติการยืม–คืน</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-card>
+    <ion-card-content>
+      <p>
+        <ion-button
+          expand="block"
+          fill="outline"
+          routerLink="/dashboard"
+          class="ion-margin-top"
+        >
+          กลับหน้าหลัก
+        </ion-button>
+      </p>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card *ngFor="let r of rows()">
+    <ion-card-header>
+      <ion-card-title>
+        {{ r.equipment.itemName || "ไม่ทราบชื่อหนังสือ" }}
+      </ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+      <p>
+        ผู้ยืม:
+        <strong>{{ r.borrowerName }}</strong>
+      </p>
+
+      <p>
+        วันที่ยืม:
+        {{ r.borrowedAt | date: "dd/MM/yyyy HH:mm" }}
+      </p>
+
+      <p *ngIf="r.returnedAt">
+        วันที่คืน:
+        {{ r.returnedAt | date: "dd/MM/yyyy HH:mm" }}
+      </p>
+
+      <ion-badge [color]="r.status === 'borrowed' ? 'warning' : 'success'">
+        {{ r.status === "borrowed" ? "กำลังยืมอยู่" : "คืนแล้ว" }}
+      </ion-badge>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

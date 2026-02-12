@@ -1,0 +1,62 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title class="ion-text-center"> ระบบยืม–คืนหนังสือ </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="register-wrapper">
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title class="ion-text-center"> สมัครสมาชิก </ion-card-title>
+      </ion-card-header>
+
+      <ion-card-content>
+        <form [formGroup]="form" (ngSubmit)="submit()">
+          <ion-item>
+            <ion-label position="stacked">Username</ion-label>
+            <ion-input formControlName="username" placeholder="ตั้งชื่อผู้ใช้">
+            </ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="stacked">Display Name</ion-label>
+            <ion-input formControlName="displayName" placeholder="ชื่อที่แสดง">
+            </ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="stacked">Password</ion-label>
+            <ion-input
+              type="password"
+              formControlName="password"
+              placeholder="ตั้งรหัสผ่าน"
+            >
+            </ion-input>
+          </ion-item>
+
+          <ion-button expand="block" type="submit" class="ion-margin-top">
+            สมัครสมาชิก
+          </ion-button>
+
+          <ion-button
+            expand="block"
+            fill="outline"
+            routerLink="/login"
+            class="ion-margin-top"
+          >
+            มีบัญชีอยู่แล้ว? เข้าสู่ระบบ
+          </ion-button>
+        </form>
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+  <ion-toast
+    [isOpen]="toastOpen"
+    (didDismiss)="toastOpen = false"
+    [message]="toastMsg"
+    duration="2000"
+  >
+  </ion-toast>
+</ion-content>

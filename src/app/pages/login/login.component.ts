@@ -5,7 +5,7 @@ import {
   NonNullableFormBuilder,
   Validators,
 } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 
 import {
@@ -18,6 +18,11 @@ import {
   IonInput,
   IonButton,
   IonToast,
+  IonCard,
+  IonCardHeader,
+  IonCardTitle,
+  IonCardContent,
+  IonCardSubtitle,
 } from '@ionic/angular/standalone';
 
 @Component({
@@ -36,6 +41,12 @@ import {
     IonInput,
     IonButton,
     IonToast,
+    RouterLink,
+    IonCard,
+    IonCardHeader,
+    IonCardTitle,
+    IonCardContent,
+    IonCardSubtitle,
   ],
 })
 export class LoginComponent {

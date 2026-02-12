@@ -1,0 +1,36 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>จัดการสมาชิก</ion-title>
+    <ion-button slot="end" fill="clear" color="light" (click)="back()">
+      กลับ
+    </ion-button>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>รายชื่อสมาชิกทั้งหมด</ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+      <ion-grid>
+        <ion-row class="table-header">
+          <ion-col size="4">Username</ion-col>
+          <ion-col size="4">ชื่อที่แสดง</ion-col>
+          <ion-col size="4">Role</ion-col>
+        </ion-row>
+
+        <ion-row *ngFor="let u of users" class="table-row">
+          <ion-col size="4">{{ u.username }}</ion-col>
+          <ion-col size="4">{{ u.displayName }}</ion-col>
+          <ion-col size="4">
+            <ion-badge [color]="u.role === 'admin' ? 'danger' : 'medium'">
+              {{ u.role }}
+            </ion-badge>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

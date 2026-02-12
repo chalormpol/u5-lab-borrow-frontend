@@ -1,119 +1,225 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>Lab Borrow Dashboard</ion-title>
+  <ion-toolbar color="primary">
+    <ion-title>ระบบยืม–คืนหนังสือ</ion-title>
     <ion-buttons slot="end">
-      <ion-button (click)="logout()">Logout</ion-button>
+      <ion-button fill="clear" color="light" (click)="logout()">
+        Logout
+      </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
-  <p>
-    สวัสดี, <strong>{{ me?.displayName }}</strong>
-    <ion-badge style="margin-left: 8px">{{ me?.role }}</ion-badge>
-  </p>
-  <p *ngIf="!isAdmin" style="opacity: 0.75">
-    หมายเหตุ: ผู้ใช้ทั่วไป “ลบรายการไม่ได้” และ
-    “คืนได้เฉพาะรายการที่ยืมด้วยชื่อของตน”
-  </p>
+  <!-- USER INFO -->
+  <ion-card>
+    <ion-card-content>
+      <p>
+        สวัสดี,
+        <strong>{{ me?.displayName }}</strong>
 
-  <h3>{{ editingId ? "แก้ไขข้อมูลอุปกรณ์" : "เพิ่มอุปกรณ์" }}</h3>
-
-  <form [formGroup]="form" (ngSubmit)="editingId ? saveEdit() : add()">
-    <ion-item>
-      <ion-label position="stacked">ชื่ออุปกรณ์</ion-label>
-      <ion-input
-        formControlName="itemName"
-        placeholder="เช่น Laptop Dell"
-      ></ion-input>
-    </ion-item>
-
-    <ion-item>
-      <ion-label position="stacked">หมวดหมู่</ion-label>
-      <ion-select formControlName="category">
-        <ion-select-option value="Computer">Computer</ion-select-option>
-        <ion-select-option value="Network">Network</ion-select-option>
-        <ion-select-option value="Electronics">Electronics</ion-select-option>
-        <ion-select-option value="Other">Other</ion-select-option>
-      </ion-select>
-    </ion-item>
-
-    <ion-item>
-      <ion-label position="stacked">จำนวน</ion-label>
-      <ion-input type="number" formControlName="qty"></ion-input>
-    </ion-item>
-
-    <ion-button expand="block" type="submit">
-      {{ editingId ? "บันทึกการแก้ไข" : "เพิ่มอุปกรณ์" }}
-    </ion-button>
-
-    <ion-button
-      *ngIf="editingId"
-      expand="block"
-      fill="outline"
-      (click)="cancelEdit()"
-    >
-      ยกเลิกการแก้ไข
-    </ion-button>
-  </form>
-
-  <h3 style="margin-top: 18px">Data Table (Array) - รายการอุปกรณ์</h3>
-
-  <ion-grid>
-    <ion-row
-      style="font-weight: 700; border-bottom: 1px solid #ddd; padding: 8px 0"
-    >
-      <ion-col size="1">ID</ion-col>
-      <ion-col size="4">อุปกรณ์</ion-col>
-      <ion-col size="2">หมวด</ion-col>
-      <ion-col size="1">Qty</ion-col>
-      <ion-col size="2">Status</ion-col>
-      <ion-col size="2">ผู้ยืม</ion-col>
-    </ion-row>
-
-    <ion-row
-      *ngFor="let r of rows"
-      style="border-bottom: 1px solid #f0f0f0; padding: 8px 0"
-    >
-      <ion-col size="1">{{ r._id }}</ion-col>
-      <ion-col size="4">{{ r.itemName }}</ion-col>
-      <ion-col size="2">{{ r.category }}</ion-col>
-      <ion-col size="1">{{ r.qty }}</ion-col>
-      <ion-col size="2">
-        <ion-badge>{{ r.status }}</ion-badge>
-      </ion-col>
-      <ion-col size="2">{{ r.borrowerName || "-" }}</ion-col>
-
-      <ion-col
-        size="12"
-        style="margin-top: 8px; display: flex; flex-wrap: wrap; gap: 8px"
-      >
-        <ion-button size="small" fill="outline" (click)="startEdit(r)"
-          >Edit</ion-button
+        <ion-badge
+          [color]="me?.role === 'admin' ? 'danger' : 'medium'"
+          class="ion-margin-start"
         >
-        <ion-button size="small" color="danger" (click)="remove(r._id)"
-          >Delete</ion-button
-        >
+          {{ me?.role }}
+        </ion-badge>
+      </p>
+
+      <p *ngIf="!isAdmin" class="note-text">
+        ผู้ใช้ทั่วไป “ลบไม่ได้” และ “คืนได้เฉพาะของตน”
+      </p>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card>
+    <ion-card-content>
+      <ion-grid>
+        <ion-row>
+          <ion-col size="12" size-md="4" class="summary-box">
+            <h2>{{ totalCount }}</h2>
+            <p>รายการทั้งหมด</p>
+          </ion-col>
+
+          <ion-col size="12" size-md="4" class="summary-box">
+            <h2>{{ borrowedCount }}</h2>
+            <p>กำลังถูกยืม</p>
+          </ion-col>
+
+          <ion-col size="12" size-md="4" class="summary-box">
+            <h2>{{ availableCount }}</h2>
+            <p>ว่าง</p>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- HISTORY CARD -->
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>ประวัติการยืม–คืน</ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+      <ion-button expand="block" color="primary" routerLink="/history">
+        <ion-icon name="time-outline" slot="start"></ion-icon>
+        ดูประวัติการยืม–คืน
+      </ion-button>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- USERS CARD (Admin Only) -->
+  <ion-card *ngIf="isAdmin">
+    <ion-card-header>
+      <ion-card-title>จัดการสมาชิก</ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+      <ion-button expand="block" color="secondary" routerLink="/users">
+        <ion-icon name="people-outline" slot="start"></ion-icon>
+        จัดการสมาชิก
+      </ion-button>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- FORM -->
+  <ion-card *ngIf="isAdmin">
+    <ion-card-header>
+      <ion-card-title>
+        {{ editingId ? "แก้ไขข้อมูลหนังสือ" : "เพิ่มหนังสือ" }}
+      </ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+      <form [formGroup]="form" (ngSubmit)="editingId ? saveEdit() : add()">
+        <ion-item>
+          <ion-label position="stacked">ชื่อหนังสือ</ion-label>
+          <ion-input formControlName="itemName" placeholder="เช่น หนังสือนิทาน">
+          </ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-label position="stacked">หมวดหมู่</ion-label>
+          <ion-select formControlName="category">
+            <ion-select-option value="Philosophy">ปรัชญา</ion-select-option>
+            <ion-select-option value="Religion">ศาสนา</ion-select-option>
+            <ion-select-option value="Science">วิทยาศาสตร์</ion-select-option>
+            <ion-select-option value="Other">อื่นๆ</ion-select-option>
+          </ion-select>
+        </ion-item>
+
+        <ion-item>
+          <ion-label position="stacked">จำนวน</ion-label>
+          <ion-input type="number" formControlName="qty"></ion-input>
+        </ion-item>
+
+        <ion-button expand="block" type="submit" class="ion-margin-top">
+          {{ editingId ? "บันทึกการแก้ไข" : "เพิ่มหนังสือ" }}
+        </ion-button>
 
         <ion-button
-          size="small"
+          *ngIf="editingId"
+          expand="block"
           fill="outline"
-          (click)="borrow(r)"
-          [disabled]="r.status === 'borrowed'"
+          (click)="cancelEdit()"
+          class="ion-margin-top"
         >
-          Borrow
+          ยกเลิกการแก้ไข
         </ion-button>
-        <ion-button
-          size="small"
-          fill="outline"
-          (click)="returnEquip(r)"
-          [disabled]="r.status === 'available'"
-        >
-          Return
-        </ion-button>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
+      </form>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- TABLE -->
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>รายการหนังสือ</ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+      <ion-grid>
+        <ion-row class="table-header ion-hide-md-down">
+          <ion-col size="3">หนังสือ</ion-col>
+          <ion-col size="2">หมวดหมู่</ion-col>
+          <ion-col size="1">Qty</ion-col>
+          <ion-col size="1">Status</ion-col>
+          <ion-col size="2">วันที่ยืม</ion-col>
+          <ion-col size="3">จัดการ</ion-col>
+        </ion-row>
+
+        <ion-row *ngFor="let r of rows" class="table-row">
+          <!-- หนังสือ -->
+          <ion-col size="12" size-md="3">
+            <strong>{{ r.itemName }}</strong>
+            <div class="mobile-only">หมวด: {{ r.category }}</div>
+          </ion-col>
+
+          <!-- หมวด (ซ่อนในมือถือ) -->
+          <ion-col size="2" class="ion-hide-md-down">
+            {{ r.category }}
+          </ion-col>
+
+          <!-- Qty -->
+          <ion-col size="6" size-md="1"> จำนวน: {{ r.qty }} </ion-col>
+
+          <!-- Status -->
+          <ion-col size="6" size-md="1">
+            <ion-badge
+              [color]="r.status === 'borrowed' ? 'warning' : 'success'"
+            >
+              {{ r.status === "borrowed" ? "ยืมแล้ว" : "ว่าง" }}
+            </ion-badge>
+
+            <div class="borrower" *ngIf="r.borrowerName">
+              ผู้ยืม: {{ r.borrowerName }}
+            </div>
+          </ion-col>
+
+          <!-- วันที่ยืม -->
+          <ion-col size="12" size-md="2">
+            <div *ngIf="r.borrowedAt">
+              วันที่ยืม: {{ r.borrowedAt | date: "short" }}
+            </div>
+          </ion-col>
+
+          <!-- ปุ่ม -->
+          <ion-col size="12" size-md="3" class="btn-group">
+            <ion-button size="small" fill="outline" (click)="startEdit(r)">
+              Edit
+            </ion-button>
+
+            <ion-button
+              size="small"
+              color="danger"
+              (click)="remove(r._id)"
+              *ngIf="isAdmin"
+            >
+              Delete
+            </ion-button>
+
+            <ion-button
+              size="small"
+              fill="outline"
+              (click)="borrow(r)"
+              [disabled]="r.status === 'borrowed'"
+            >
+              Borrow
+            </ion-button>
+
+            <ion-button
+              size="small"
+              fill="outline"
+              (click)="returnEquip(r)"
+              *ngIf="isAdmin || r.borrowedBy === me?.id"
+              [disabled]="r.status === 'available'"
+            >
+              Return
+            </ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card-content>
+  </ion-card>
 
   <ion-toast
     [isOpen]="toastOpen"

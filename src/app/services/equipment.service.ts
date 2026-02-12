@@ -5,7 +5,7 @@ import { environment } from 'src/environments/environment.prod';
 import { AuthService } from './auth.service';
 
 export type EquipStatus = 'available' | 'borrowed';
-export type EquipCategory = 'Computer' | 'Network' | 'Electronics' | 'Other';
+export type EquipCategory = 'Philosophy' | 'Religion' | 'Science' | 'Other';
 export interface Equipment {
   _id: string;
   itemName: string;
@@ -13,6 +13,7 @@ export interface Equipment {
   qty: number;
   status: EquipStatus;
   borrowerName: string;
+  borrowedBy?: string;
   borrowedAt: string | null;
 }
 @Injectable({ providedIn: 'root' })
@@ -38,7 +39,7 @@ export class EquipmentService {
 
   update(
     id: string,
-    data: { itemName: string; category: EquipCategory; qty: number }
+    data: { itemName: string; category: EquipCategory; qty: number },
   ) {
     return this.http
       .put<Equipment>(`${environment.apiBase}/equipments/${id}`, data, {
@@ -60,7 +61,7 @@ export class EquipmentService {
       .post<Equipment>(
         `${environment.apiBase}/equipments/${id}/borrow`,
         { borrowerName },
-        { headers: this.auth.headers() }
+        { headers: this.auth.headers() },
       )
       .pipe(catchError(this.err));
   }
@@ -70,7 +71,7 @@ export class EquipmentService {
       .post<Equipment>(
         `${environment.apiBase}/equipments/${id}/return`,
         {},
-        { headers: this.auth.headers() }
+        { headers: this.auth.headers() },
       )
       .pipe(catchError(this.err));
   }
