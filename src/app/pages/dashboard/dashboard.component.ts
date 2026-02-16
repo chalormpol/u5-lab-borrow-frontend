@@ -37,7 +37,12 @@ import {
   IonIcon,
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { timeOutline, calendarOutline, cashOutline } from 'ionicons/icons';
+import {
+  timeOutline,
+  peopleOutline,
+  calendarOutline,
+  cashOutline,
+} from 'ionicons/icons';
 
 @Component({
   standalone: true,
@@ -79,6 +84,7 @@ export class DashboardComponent implements OnInit {
   constructor() {
     addIcons({
       'time-outline': timeOutline,
+      'people-outline': peopleOutline,
       'calendar-outline': calendarOutline,
       'cash-outline': cashOutline,
     });
