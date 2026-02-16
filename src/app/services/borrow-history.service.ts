@@ -11,9 +11,12 @@ export interface BorrowHistory {
     itemName: string;
   };
   borrowerName: string;
-  status: 'borrowed' | 'returned';
+  status: 'borrowed' | 'returned' | 'overdue';
   borrowedAt: string;
+  dueDate: string;
   returnedAt?: string;
+  overdueDays?: number;
+  fineAmount?: number;
 }
 
 @Injectable({ providedIn: 'root' })

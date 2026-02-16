@@ -38,13 +38,48 @@
         {{ r.borrowedAt | date: "dd/MM/yyyy HH:mm" }}
       </p>
 
+      <!-- ✅ วันครบกำหนด -->
+      <p>
+        ครบกำหนดคืน:
+        <strong>{{ r.dueDate | date: "dd/MM/yyyy HH:mm" }}</strong>
+      </p>
+
+      <!-- ✅ วันที่คืน -->
       <p *ngIf="r.returnedAt">
         วันที่คืน:
         {{ r.returnedAt | date: "dd/MM/yyyy HH:mm" }}
       </p>
 
-      <ion-badge [color]="r.status === 'borrowed' ? 'warning' : 'success'">
-        {{ r.status === "borrowed" ? "กำลังยืมอยู่" : "คืนแล้ว" }}
+      <!-- ✅ แสดงถ้าเกินกำหนด -->
+      <div *ngIf="r.overdueDays && r.overdueDays > 0" class="ion-margin-top">
+        <ion-badge color="danger">
+          เกินกำหนด {{ r.overdueDays }} วัน
+        </ion-badge>
+
+        <p class="ion-margin-top">
+          ค่าปรับ:
+          <strong style="color: red"> {{ r.fineAmount | number }} บาท </strong>
+        </p>
+      </div>
+
+      <!-- ✅ badge สถานะ -->
+      <ion-badge
+        class="ion-margin-top"
+        [color]="
+          r.status === 'borrowed'
+            ? 'warning'
+            : r.status === 'overdue'
+              ? 'danger'
+              : 'success'
+        "
+      >
+        {{
+          r.status === "borrowed"
+            ? "กำลังยืมอยู่"
+            : r.status === "overdue"
+              ? "เกินกำหนด"
+              : "คืนแล้ว"
+        }}
       </ion-badge>
     </ion-card-content>
   </ion-card>
