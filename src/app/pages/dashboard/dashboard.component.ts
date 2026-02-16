@@ -36,6 +36,8 @@ import {
   IonCardContent,
   IonIcon,
 } from '@ionic/angular/standalone';
+import { addIcons } from 'ionicons';
+import { timeOutline, calendarOutline, cashOutline } from 'ionicons/icons';
 
 @Component({
   standalone: true,
@@ -73,6 +75,14 @@ export class DashboardComponent implements OnInit {
   private auth = inject(AuthService);
   private router = inject(Router);
   private eqApi = inject(EquipmentService);
+
+  constructor() {
+    addIcons({
+      'time-outline': timeOutline,
+      'calendar-outline': calendarOutline,
+      'cash-outline': cashOutline,
+    });
+  }
 
   toastOpen = false;
   toastMsg = '';
