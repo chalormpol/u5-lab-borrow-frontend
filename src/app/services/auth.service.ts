@@ -6,7 +6,7 @@ import {
 } from '@angular/common/http';
 import { catchError, throwError } from 'rxjs';
 import { environment } from 'src/environments/environment.prod';
-export type Role = 'staff' | 'admin';
+export type Role = 'user' | 'admin';
 export interface AuthUser {
   id: string;
   username: string;
@@ -63,7 +63,7 @@ export class AuthService {
     this.user.set(res.user);
     localStorage.setItem(
       STORAGE_KEY,
-      JSON.stringify({ token: res.token, user: res.user })
+      JSON.stringify({ token: res.token, user: res.user }),
     );
   }
 
